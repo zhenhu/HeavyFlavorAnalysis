@@ -24,9 +24,9 @@ process.maxEvents = cms.untracked.PSet(
 # Input source
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-'/store/data/Run2018D/MuOnia/AOD/PromptReco-v2/000/325/000/00000/DEC682AE-EB09-654E-9F83-21B10F3381A2.root'
+#'/store/data/Run2018D/MuOnia/AOD/PromptReco-v2/000/325/000/00000/DEC682AE-EB09-654E-9F83-21B10F3381A2.root'
 #'/store/data/Run2018A/MuOnia/AOD/PromptReco-v1/000/315/267/00000/420129AE-DC4B-E811-B21A-FA163E42C086.root'
-#'/store/data/Run2018D/MuOnia/AOD/PromptReco-v2/000/320/673/00000/0423D458-D497-E811-8871-02163E01A93F.root'
+'/store/data/Run2018A/MuOnia/AOD/17Sep2018-v1/120000/9EA0DDF7-EE65-5C45-907D-08020A9F6AB6.root'
 	 ),
     secondaryFileNames = cms.untracked.vstring()
 )
@@ -95,8 +95,9 @@ process.SKIMStreamBPHSkim = cms.OutputModule("PoolOutputModule",
 # Other statements
 from Configuration.AlCa.GlobalTag import GlobalTag
 #process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:com10', '')
-process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Prompt_v4', '')
 #process.GlobalTag = GlobalTag(process.GlobalTag, '92X_upgrade2017_realistic_v10', '')
+#process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Prompt_v4', '')		#for 2018 PromptReco 
+process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Sep2018Rereco_v1', '')		#for 2018 Rereco
 
 process.oniaSelectedMuons.cut = cms.string('muonID(\"TMOneStationTight\")'
                     ' && abs(innerTrack.dxy) < 0.3'

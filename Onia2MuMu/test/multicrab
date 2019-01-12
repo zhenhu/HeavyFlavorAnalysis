@@ -89,9 +89,9 @@ def main():
         #config.Data.totalUnits = 30
         #config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions17/13TeV/PromptReco/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON_MuonPhys.txt'
         config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions18/13TeV/PromptReco/Cert_314472-324209_13TeV_PromptReco_Collisions18_JSON_MuonPhys.txt'
-        #config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
+        config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
         #config.Data.outLFNDirBase = '/store/group/lpcmuon/Run2017/fourmuon'
-        config.Data.outLFNDirBase = '/store/group/l1upgrades/Run2018/fourmuon'
+        #config.Data.outLFNDirBase = '/store/group/l1upgrades/Run2018/fourmuon'
         config.Data.publication = True
         config.Data.outputDatasetTag = None
         config.Site.storageSite = 'T3_US_FNALLPC' # Choose your site. 
@@ -99,15 +99,16 @@ def main():
 
         # Will submit one task for each of these input datasets.
         inputDatasets = [
-								 #'/MuOnia/Run2018A-PromptReco-v1/AOD',
-								 #'/MuOnia/Run2018A-PromptReco-v2/AOD',
-								 #'/MuOnia/Run2018A-PromptReco-v3/AOD',
-								 #'/MuOnia/Run2018B-PromptReco-v1/AOD',
-								 #'/MuOnia/Run2018B-PromptReco-v2/AOD',
-								 #'/MuOnia/Run2018C-PromptReco-v1/AOD',
-								 #'/MuOnia/Run2018C-PromptReco-v2/AOD',
-								 #'/MuOnia/Run2018C-PromptReco-v3/AOD',
-								 '/MuOnia/Run2018D-PromptReco-v2/AOD',
+				#'/MuOnia/Run2018A-PromptReco-v1/AOD',
+				#'/MuOnia/Run2018A-PromptReco-v2/AOD',
+				#'/MuOnia/Run2018A-PromptReco-v3/AOD',
+				#'/MuOnia/Run2018B-PromptReco-v1/AOD',
+				#'/MuOnia/Run2018B-PromptReco-v2/AOD',
+				#'/MuOnia/Run2018C-PromptReco-v1/AOD',
+				#'/MuOnia/Run2018C-PromptReco-v2/AOD',
+				#'/MuOnia/Run2018C-PromptReco-v3/AOD',
+				#'/MuOnia/Run2018D-PromptReco-v2/AOD',
+				'/MuOnia/Run2018A-17Sep2018-v1/AOD'
                         ]
 
         for inDS in inputDatasets:
