@@ -73,7 +73,7 @@ process.SKIMStreamBPHSkim = cms.OutputModule("PoolOutputModule",
         filterName = cms.untracked.string('BPHSkim')
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
-    fileName = cms.untracked.string('BPHSkim.root'),
+    fileName = cms.untracked.string('BPHSkim_2018D.root'),
     outputCommands = cms.untracked.vstring('drop *', 
         'keep recoVertexs_offlinePrimaryVertices_*_*', 
         'keep *_offlineBeamSpot_*_*', 
