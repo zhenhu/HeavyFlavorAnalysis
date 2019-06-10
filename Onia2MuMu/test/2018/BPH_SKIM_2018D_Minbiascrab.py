@@ -24,7 +24,7 @@ process.maxEvents = cms.untracked.PSet(
 # Input source
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-'root://cms-xrd-global.cern.ch//store/data/Run2017F/ZeroBias/AOD/17Nov2017-v1/50000/004AA19E-4DDF-E711-B83B-002590DE6E32.root'
+'/store/data/Run2017F/ZeroBias/AOD/17Nov2017-v1/50000/004AA19E-4DDF-E711-B83B-002590DE6E32.root'
 #'root://cms-xrd-global.cern.ch//store/data/Run2017F/MinimumBias/AOD/PromptReco-v1/000/305/038/00000/420B5B30-E1B1-E711-AED7-02163E01A54B.root'
 #'root://cms-xrd-global.cern.ch//store/data/Run2017B/MuOnia/AOD/PromptReco-v1/000/297/050/00000/021AAD45-3E56-E711-8613-02163E019DCB.root'
 	 ),
@@ -67,7 +67,7 @@ process.SKIMStreamBPHSkim = cms.OutputModule("PoolOutputModule",
         filterName = cms.untracked.string('BPHSkim')
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
-    fileName = cms.untracked.string('BPHSkim.root'),
+    fileName = cms.untracked.string('BPHSkim_2018D_MiniBias.root'),
     outputCommands = cms.untracked.vstring('drop *', 
         'keep recoVertexs_offlinePrimaryVertices_*_*', 
         'keep *_offlineBeamSpot_*_*', 
@@ -89,8 +89,7 @@ process.SKIMStreamBPHSkim = cms.OutputModule("PoolOutputModule",
 
 # Other statements
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v2', '')
-
+process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Prompt_v13', '')  #for 2018 PromptReco  
 process.oniaSelectedMuons.cut = cms.string('muonID(\"TMOneStationTight\")'
                     ' && abs(innerTrack.dxy) < 0.3'
                     ' && abs(innerTrack.dz)  < 20.'

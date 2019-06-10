@@ -73,7 +73,7 @@ process.SKIMStreamBPHSkim = cms.OutputModule("PoolOutputModule",
         filterName = cms.untracked.string('BPHSkim')
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
-    fileName = cms.untracked.string('BPHSkim.root'),
+    fileName = cms.untracked.string('BPHSkim_2018D.root'),
     outputCommands = cms.untracked.vstring('drop *', 
         'keep recoVertexs_offlinePrimaryVertices_*_*', 
         'keep *_offlineBeamSpot_*_*', 
@@ -96,8 +96,7 @@ process.SKIMStreamBPHSkim = cms.OutputModule("PoolOutputModule",
 from Configuration.AlCa.GlobalTag import GlobalTag
 #process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:com10', '')
 #process.GlobalTag = GlobalTag(process.GlobalTag, '92X_upgrade2017_realistic_v10', '')
-#process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Prompt_v4', '')		#for 2018 PromptReco 
-process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Sep2018Rereco_v1', '')		#for 2018 Rereco
+process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Prompt_v13', '')		#for 2018 PromptReco 
 
 process.oniaSelectedMuons.cut = cms.string('muonID(\"TMOneStationTight\")'
                     ' && abs(innerTrack.dxy) < 0.3'

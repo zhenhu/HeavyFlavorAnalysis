@@ -1,0 +1,144 @@
+#!/usr/bin/env python
+"""
+This is a small script that does the equivalent of multicrab.
+"""
+import os
+from optparse import OptionParser
+
+from CRABAPI.RawCommand import crabCommand
+from CRABClient.ClientExceptions import ClientException
+from httplib import HTTPException
+
+
+def getOptions():
+    """
+    Parse and return the arguments provided by the user.
+    """
+    usage = ("Usage: %prog --crabCmd CMD [--workArea WAD --crabCmdOpts OPTS]"
+             "\nThe multicrab command executes 'crab CMD OPTS' for each project directory contained in WAD"
+             "\nUse multicrab -h for help")
+
+    parser = OptionParser(usage=usage)
+
+    parser.add_option('-c', '--crabCmd',
+                      dest = 'crabCmd',
+                      default = '',
+                      help = "crab command",
+                      metavar = 'CMD')
+
+    parser.add_option('-w', '--workArea',
+                      dest = 'workArea',
+                      default = '',
+                      help = "work area directory (only if CMD != 'submit')",
+                      metavar = 'WAD')
+
+    parser.add_option('-o', '--crabCmdOpts',
+                      dest = 'crabCmdOpts',
+                      default = '',
+                      help = "options for crab command CMD",
+                      metavar = 'OPTS')
+
+    parser.add_option('-v', '--crabJobsVersion',
+                      dest = 'crabJobsVersion',
+                      default = '', 
+                      help = "options for crab jobs version",
+                      metavar = 'VERSION')
+
+
+    (options, arguments) = parser.parse_args()
+
+    if arguments:
+        parser.error("Found positional argument(s): %s." % (arguments))
+    if not options.crabCmd:
+        parser.error("(-c CMD, --crabCmd=CMD) option not provided.")
+    if options.crabCmd != 'submit':
+        if not options.workArea:
+            parser.error("(-w WAR, --workArea=WAR) option not provided.")
+        if not os.path.isdir(options.workArea):
+            parser.error("'%s' is not a valid directory." % (options.workArea))
+
+    return options
+
+
+def main():
+
+    options = getOptions()
+
+    # The submit command needs special treatment.
+    if options.crabCmd == 'submit':
+
+        #--------------------------------------------------------
+        # This is the base config:
+        #--------------------------------------------------------
+        from CRABClient.UserUtilities import config, getUsernameFromSiteDB
+        config = config()
+
+        config.General.requestName = None
+        config.General.workArea = 'crabOutput2017_%s' % (options.crabJobsVersion)
+        config.General.transferOutputs = True
+        config.General.transferLogs = True
+
+        config.JobType.pluginName = 'Analysis'
+        config.JobType.psetName = 'BPH_SKIM_crab_2017.py'
+        config.JobType.outputFiles = ['BPHSkim_2017.root']
+
+        config.Data.inputDataset = None
+        config.Data.inputDBS = 'global'
+        config.Data.splitting = 'FileBased' #'LumiBased'
+        config.Data.unitsPerJob = 3
+        config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_MuonPhys.txt'
+        config.Data.outLFNDirBase = '/store/user/%s/FourMuon_Analysis/MuOnia/2017_v2/' % (getUsernameFromSiteDB())
+        config.Data.publication = True
+        config.Data.outputDatasetTag = None
+        config.Site.storageSite = 'T3_US_FNALLPC' # Choose your site. 
+        #--------------------------------------------------------
+
+        # Will submit one task for each of these input datasets.
+        inputDatasets = [
+                         '/MuOnia/Run2017B-17Nov2017-v1/AOD',
+                         '/MuOnia/Run2017C-17Nov2017-v1/AOD',
+                         '/MuOnia/Run2017D-17Nov2017-v1/AOD',
+                         '/MuOnia/Run2017E-17Nov2017-v1/AOD',
+                         '/MuOnia/Run2017F-17Nov2017-v1/AOD'
+                        ]
+
+        for inDS in inputDatasets:
+            PD = inDS.split('/')[1]
+            Run = inDS.split('/')[2]
+            config.General.requestName = 'BPHSkim-%s-%s-%s' % (PD, options.crabJobsVersion, Run)
+            config.Data.inputDataset = inDS
+            config.Data.outputDatasetTag = 'BPHSkim-%s-%s' % (options.crabJobsVersion, Run)
+            try:
+                print "Submitting for input dataset %s" % (inDS)
+                crabCommand(options.crabCmd, config = config, *options.crabCmdOpts.split())
+            except HTTPException as hte:
+                print "Submission for input dataset %s failed: %s" % (inDS, hte.headers)
+            except ClientException as cle:
+                print "Submission for input dataset %s failed: %s" % (inDS, cle)
+
+    # All other commands can be simply executed.
+    elif options.workArea:
+
+        for dir in os.listdir(options.workArea):
+            projDir = os.path.join(options.workArea, dir)
+            if not os.path.isdir(projDir):
+                continue
+            # Execute the crab command.
+            msg = "Executing (the equivalent of): crab %s --dir %s %s" % (options.crabCmd, projDir, options.crabCmdOpts)
+            print "-"*len(msg)
+            print msg
+            print "-"*len(msg)
+            try:
+                crabCommand(options.crabCmd, dir = projDir, *options.crabCmdOpts.split())
+            except HTTPException as hte:
+                print "Failed executing command %s for task %s: %s" % (options.crabCmd, projDir, hte.headers)
+            except ClientException as cle:
+                print "Failed executing command %s for task %s: %s" % (options.crabCmd, projDir, cle)
+
+
+
+
+
+ 
+if __name__ == '__main__':
+    main()

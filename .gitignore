@@ -1,0 +1,4 @@
+*.log
+*.root
+Onia2MuMu/test/2018/crabOutput2018*/*
+Onia2MuMu/test/2017/crabOutput*/*
