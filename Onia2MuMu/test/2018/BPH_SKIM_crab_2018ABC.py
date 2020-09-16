@@ -74,22 +74,23 @@ process.SKIMStreamBPHSkim = cms.OutputModule("PoolOutputModule",
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
     fileName = cms.untracked.string('BPHSkim_2018ABC.root'),
-    outputCommands = cms.untracked.vstring('drop *', 
-        'keep recoVertexs_offlinePrimaryVertices_*_*', 
-        'keep *_offlineBeamSpot_*_*', 
-        'keep *_TriggerResults_*_HLT', 
-#        'keep *_hltGtStage2ObjectMap_*_HLT', 
-        'keep *_hltTriggerSummaryAOD_*_HLT', 
-#        'keep *_gmtStage2Digis_Muon_RECO', 
-#        'keep *_gtDigis_*_RECO', 
-#        'keep *_oniaSelectedTracks_*_*', 
-#        'keep *_oniaPhotonCandidates_*_*', 
-        'keep *_oniaPATMuonsWithoutTrigger_*_*',
-		  'keep *_oniaSelectedMuons_*_*',
-#		  'keep *_patMuons_*_*',
-		  'keep *_onia2MuMuPAT_*_*', 
- #       'keep *_oniaV0Tracks_*_*', 
-        'keep PileupSummaryInfos_*_*_*')
+    outputCommands = cms.untracked.vstring('keep *', 'drop *_MEtoEDMConverter_*_*' ,
+    'drop *_*Stage2Digis_*_*',
+    'drop *_ak*_*_*',
+    'drop CTPPS*_*_*_*',
+    'drop *_dedx*_*_*',
+    'drop Hcal*_*_*_*',
+    'drop *_cmsTopTagPFJetsCHS_*_*',
+    'drop recoJetedmRefToBase*_*_*_*',
+    'drop Totem*_*_*_*',
+    'drop recoPFTauDiscriminator_*_*_*',
+    'drop *_selectDigi_*_*',
+    'drop recoBasicJets_*_*_*',
+    'drop recoPFJets*_*_*_*',
+    'drop recoPFMETs*_*_*_*',
+    'drop recoPFTaus*_*_*_*',
+    'drop recPreshowerCluster*_*_*_*',
+ )
 )
 
 # Other statements
@@ -97,7 +98,7 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 #process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:com10', '')
 #process.GlobalTag = GlobalTag(process.GlobalTag, '92X_upgrade2017_realistic_v10', '')
 #process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Prompt_v4', '')		#for 2018 PromptReco 
-process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Sep2018ABC_v2', '')		#for 2018 Rereco
+process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v13', '')		#for 2018 Rereco
 
 process.oniaSelectedMuons.cut = cms.string('muonID(\"TMOneStationTight\")'
                     ' && abs(innerTrack.dxy) < 0.3'
@@ -105,7 +106,7 @@ process.oniaSelectedMuons.cut = cms.string('muonID(\"TMOneStationTight\")'
                     ' && innerTrack.hitPattern.trackerLayersWithMeasurement > 5'
                     ' && innerTrack.hitPattern.pixelLayersWithMeasurement > 0'
                     ' && innerTrack.quality(\"highPurity\")'
-                    ' && (abs(eta) <= 2.4 && pt > 2.0)'
+                    ' && (abs(eta) <= 2.5 && pt > 1.8)'
 )
 
 #process.onia2MuMuPAT.muons=cms.InputTag('oniaPATMuonsWithoutTrigger')

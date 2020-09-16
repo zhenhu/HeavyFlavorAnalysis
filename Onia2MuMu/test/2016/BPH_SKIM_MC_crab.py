@@ -18,15 +18,18 @@ process.load('Configuration.StandardSequences.Skims_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(1000)
+    input = cms.untracked.int32(-1)
 )
 
 # Input source
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-#'/store/data/Run2018D/MuOnia/AOD/PromptReco-v2/000/325/000/00000/DEC682AE-EB09-654E-9F83-21B10F3381A2.root'
-#'/store/data/Run2018A/MuOnia/AOD/PromptReco-v1/000/315/267/00000/420129AE-DC4B-E811-B21A-FA163E42C086.root'
-'/store/data/Run2018A/MuOnia/AOD/17Sep2018-v1/120000/9EA0DDF7-EE65-5C45-907D-08020A9F6AB6.root'
+'file:/eos/uscms/store/user/l1upgrades/TVP_13/TVP13_LHE_RECO_01/TVPMC_13/MC_TVP13_LHE_RECO_01/180523_204705/0000/BPH_RECO_13TeV_4.root'
+#'root://cms-xrd-global.cern.ch//store/mc/Summer12DR53X/FourMuon_UpsilonInvMassCut_MSEL5_8TeV_pythia6/AODSIM/PU_RD2_START53_V19F_ext1-v1/00000/02BD8C8E-B90F-E711-A21B-FA163E180050.root',
+#'/store/mc/RunIISummer17DRStdmix/UpsilonMuMu_UpsilonPt6_TuneCUEP8M1_13TeV-pythia8-evtgen/AODSIM/NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/00000/0059AB5D-9FBA-E711-B0C0-0025905B8568.root',
+#'/store/mc/RunIISummer17DRStdmix/H0ToUps1SMuMu_m18p5_TuneCUEP8M1_13TeV-pythia8/AODSIM/NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/150000/0C5DF8BB-8FAA-E711-9A73-0CC47AD98C5E.root',
+#'/store/mc/RunIISummer17DRStdmix/H0ToUps1SMuMu_m18p5_TuneCUEP8M1_13TeV-pythia8/AODSIM/NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/150000/1000B701-B1AB-E711-A68E-008CFAC93BAC.root',
+#'root://cms-xrd-global.cern.ch//store/data/Run2017D/MuOnia/AOD/PromptReco-v1/000/302/031/00000/06A5FA59-418F-E711-9F75-02163E0139C0.root'
 	 ),
     secondaryFileNames = cms.untracked.vstring()
 )
@@ -56,12 +59,13 @@ process.RECOSIMoutput = cms.OutputModule("PoolOutputModule",
 )
 
 
-process.oniaSelectedMuonsCounter = cms.EDFilter('CandViewCountFilter',
-      src = cms.InputTag('oniaSelectedMuons'),
-      minNumber = cms.uint32(4),
-)
+#process.oniaSelectedMuonsCounter = cms.EDFilter('CandViewCountFilter',
+#      src = cms.InputTag('oniaSelectedMuons'),
+#      minNumber = cms.uint32(4),
+#)
 
-process.BPHSkimSequence = cms.Sequence(process.oniaPATMuonsWithoutTrigger*process.oniaSelectedMuons*process.onia2MuMuPAT*process.onia2MuMuPATCounter*process.oniaSelectedMuonsCounter)
+process.BPHSkimSequence = cms.Sequence(process.oniaPATMuonsWithoutTrigger*process.oniaSelectedMuons*process.onia2MuMuPAT*process.onia2MuMuPATCounter)
+#process.BPHSkimSequence = cms.Sequence(process.oniaPATMuonsWithoutTrigger*process.oniaSelectedMuons*process.onia2MuMuPAT*process.onia2MuMuPATCounter*process.oniaSelectedMuonsCounter)
 
 # Additional output definition
 process.SKIMStreamBPHSkim = cms.OutputModule("PoolOutputModule",
@@ -73,7 +77,7 @@ process.SKIMStreamBPHSkim = cms.OutputModule("PoolOutputModule",
         filterName = cms.untracked.string('BPHSkim')
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
-    fileName = cms.untracked.string('BPHSkim_2017.root'),
+    fileName = cms.untracked.string('BPHSkim.root'),
     outputCommands = cms.untracked.vstring('keep *', 'drop *_MEtoEDMConverter_*_*' ,
     'drop *_*Stage2Digis_*_*',
     'drop *_ak*_*_*',
@@ -95,7 +99,13 @@ process.SKIMStreamBPHSkim = cms.OutputModule("PoolOutputModule",
 
 # Other statements
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_v11', '')
+#process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:com10', '')
+#process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_ReReco_EOY17_v2', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, '80X_mcRun2_asymptotic_2016_TrancheIV_v8', '')
+
+process.load('PhysicsTools.PatAlgos.slimming.genParticles_cff')
+process.packedGenParticles.inputVertices = cms.InputTag('offlinePrimaryVertices')
+
 process.oniaSelectedMuons.cut = cms.string('muonID(\"TMOneStationTight\")'
                     ' && abs(innerTrack.dxy) < 0.3'
                     ' && abs(innerTrack.dz)  < 20.'
@@ -112,12 +122,16 @@ process.onia2MuMuPAT.lowerPuritySelection = cms.string("(isGlobalMuon || isTrack
 #process.onia2MuMuPAT.higherPuritySelection = cms.string("")
 #process.onia2MuMuPAT.lowerPuritySelection = cms.string("")
 
+process.onia2MuMuPAT.addMCTruth = cms.bool(True)
+
 # Path and EndPath definitions
+process.genTask_step = cms.Path(process.genParticlesTask)
 process.RECOSIMoutput_step = cms.EndPath(process.RECOSIMoutput)
 process.SKIMStreamBPHSkimOutPath = cms.EndPath(process.SKIMStreamBPHSkim)
 
 # Schedule definition
-process.schedule = cms.Schedule(process.BPHSkimPath, process.SKIMStreamBPHSkimOutPath)
+#process.schedule = cms.Schedule(process.BPHSkimPath, process.SKIMStreamBPHSkimOutPath)
+process.schedule = cms.Schedule(process.genTask_step, process.BPHSkimPath, process.SKIMStreamBPHSkimOutPath)
 
 # Schedule definition
 #process.schedule = cms.Schedule(process.BPHSkimPath,process.RECOSIMoutput_step,process.SKIMStreamBPHSkimOutPath)

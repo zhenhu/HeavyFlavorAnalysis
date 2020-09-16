@@ -70,7 +70,7 @@ def main():
         #--------------------------------------------------------
         # This is the base config:
         #--------------------------------------------------------
-        from CRABClient.UserUtilities import config, getUsernameFromSiteDB
+        from CRABClient.UserUtilities import config
         config = config()
 
         config.General.requestName = None
@@ -85,9 +85,9 @@ def main():
         config.Data.inputDataset = None
         config.Data.inputDBS = 'global'
         config.Data.splitting = 'FileBased' #'LumiBased'
-        config.Data.unitsPerJob = 3
+        config.Data.unitsPerJob = 4
         config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions18/13TeV/ReReco/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON_MuonPhys.txt'
-        config.Data.outLFNDirBase = '/store/user/%s/FourMuon_Analysis/MuOnia/2018ABC_v2/' % (getUsernameFromSiteDB())
+        config.Data.outLFNDirBase = '/store/group/l1upgrades/Run2018/fourmuon_v2/'
         config.Data.publication = True
         config.Data.outputDatasetTag = None
         config.Site.storageSite = 'T3_US_FNALLPC' # Choose your site. 
@@ -95,10 +95,14 @@ def main():
 
         # Will submit one task for each of these input datasets.
         inputDatasets = [
-#				'/MuOnia/Run2018A-17Sep2018-v1/AOD', 
-                                '/MuOnia/Run2018B-17Sep2018-v1/AOD',
-                                '/MuOnia/Run2018C-17Sep2018-v1/AOD' 
-                        ]
+           	'/MuOnia/Run2018A-17Sep2018-v1/AOD', 
+         	'/MuOnia/Run2018B-17Sep2018-v1/AOD',
+            '/MuOnia/Run2018C-17Sep2018-v1/AOD', 
+            '/Charmonium/Run2018A-17Sep2018-v1/AOD', 
+            '/Charmonium/Run2018B-17Sep2018-v1/AOD',
+         	'/Charmonium/Run2018C-17Sep2018-v1/AOD' 
+
+			]
 
         for inDS in inputDatasets:
             PD = inDS.split('/')[1]

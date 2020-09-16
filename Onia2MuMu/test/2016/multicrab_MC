@@ -70,43 +70,50 @@ def main():
         #--------------------------------------------------------
         # This is the base config:
         #--------------------------------------------------------
-        from CRABClient.UserUtilities import config
+        from CRABClient.UserUtilities import config, getUsernameFromSiteDB
         config = config()
 
         config.General.requestName = None
-        config.General.workArea = 'crabOutput2018D_%s' % (options.crabJobsVersion)
+        config.General.workArea = 'crabOutputMC_%s' % (options.crabJobsVersion)
         config.General.transferOutputs = True
         config.General.transferLogs = True
 
         config.JobType.pluginName = 'Analysis'
-        config.JobType.psetName = 'BPH_SKIM_crab_2018D.py'
-        config.JobType.outputFiles = ['BPHSkim_2018D.root']
+        config.JobType.psetName = 'BPH_SKIM_MC_crab.py'
+        config.JobType.outputFiles = ['BPHSkim.root']
 
         config.Data.inputDataset = None
-        config.Data.inputDBS = 'global'
+        config.Data.inputDBS = 'phys03'
         config.Data.splitting = 'FileBased' #'LumiBased'
-        config.Data.unitsPerJob = 4
-        config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions18/13TeV/ReReco/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON_MuonPhys.txt'
-      #  config.Data.outLFNDirBase = '/store/user/zhenhu/'
-        config.Data.outLFNDirBase = '/store/group/l1upgrades/Run2018/fourmuon_v2/'
+        config.Data.unitsPerJob = 3
+        #config.Data.totalUnits = 30
+
+        #config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
+        #config.Data.outLFNDirBase = '/store/group/lpcmuon/Run2017/'
+        config.Data.outLFNDirBase = '/store/group/lpcmuon/fourmuonMC'
         config.Data.publication = True
         config.Data.outputDatasetTag = None
         config.Site.storageSite = 'T3_US_FNALLPC' # Choose your site. 
-        config.Site.blacklist = ['T2_IT_Pisa']
         #--------------------------------------------------------
 
         # Will submit one task for each of these input datasets.
         inputDatasets = [
-         	'/MuOnia/Run2018D-PromptReco-v2/AOD',
-            '/Charmonium/Run2018D-PromptReco-v2/AOD'
+'/TVPMC_13/zhenhu-MC_TVP13_LHE_RECO_01-f6fecdf3a3ed6f00e41c15ae34022bfb/USER'
+#								 '/FourMuon_UpsilonInvMassCut_MSEL5_8TeV_pythia6/Summer12DR53X-PU_RD2_START53_V19F_ext1-v1/AODSIM',
+#								 '/H0ToUps1SMuMu_m18p5_TuneCUEP8M1_13TeV-pythia8/RunIISummer17DRStdmix-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/AODSIM',
+								 #'/UpsilonMuMu_UpsilonPt6_TuneCUEP8M1_13TeV-pythia8-evtgen/RunIISummer17DRStdmix-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/AODSIM'
                         ]
 
         for inDS in inputDatasets:
+            # inDS is of the form /A/B/C. Since B is unique for each inDS, use this in the CRAB request name.
             PD = inDS.split('/')[1]
-            Run = inDS.split('/')[2]
+            Run = inDS.split('/')[2].split('-')[1]
             config.General.requestName = 'BPHSkim-%s-%s-%s' % (PD, options.crabJobsVersion, Run)
+            #config.General.requestName = 'BPHSkim-%s-%s' % (PD, options.crabJobsVersion)
             config.Data.inputDataset = inDS
             config.Data.outputDatasetTag = 'BPHSkim-%s-%s' % (options.crabJobsVersion, Run)
+            #config.Data.outputDatasetTag = 'BPHSkim-%s' % (options.crabJobsVersion)
+				# Submit.
             try:
                 print "Submitting for input dataset %s" % (inDS)
                 crabCommand(options.crabCmd, config = config, *options.crabCmdOpts.split())

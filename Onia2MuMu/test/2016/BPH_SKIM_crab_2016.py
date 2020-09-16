@@ -26,7 +26,7 @@ process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
 #'/store/data/Run2018D/MuOnia/AOD/PromptReco-v2/000/325/000/00000/DEC682AE-EB09-654E-9F83-21B10F3381A2.root'
 #'/store/data/Run2018A/MuOnia/AOD/PromptReco-v1/000/315/267/00000/420129AE-DC4B-E811-B21A-FA163E42C086.root'
-'/store/data/Run2018A/MuOnia/AOD/17Sep2018-v1/120000/9EA0DDF7-EE65-5C45-907D-08020A9F6AB6.root'
+'/store/data/Run2016H/Charmonium/AOD/07Aug17-v1/90000/8ED7DF8C-439C-E711-BB89-3417EBE644A7.root'
 	 ),
     secondaryFileNames = cms.untracked.vstring()
 )
@@ -73,8 +73,8 @@ process.SKIMStreamBPHSkim = cms.OutputModule("PoolOutputModule",
         filterName = cms.untracked.string('BPHSkim')
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
-    fileName = cms.untracked.string('BPHSkim_2017.root'),
-    outputCommands = cms.untracked.vstring('keep *', 'drop *_MEtoEDMConverter_*_*' ,
+    fileName = cms.untracked.string('BPHSkim_2016.root'),
+    outputCommands = cms.untracked.vstring('keep *', 'drop *_MEtoEDMConverter_*_*',
     'drop *_*Stage2Digis_*_*',
     'drop *_ak*_*_*',
     'drop CTPPS*_*_*_*',
@@ -95,7 +95,7 @@ process.SKIMStreamBPHSkim = cms.OutputModule("PoolOutputModule",
 
 # Other statements
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_v11', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016SeptRepro_v7', '')
 process.oniaSelectedMuons.cut = cms.string('muonID(\"TMOneStationTight\")'
                     ' && abs(innerTrack.dxy) < 0.3'
                     ' && abs(innerTrack.dz)  < 20.'
