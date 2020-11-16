@@ -125,6 +125,7 @@ process.onia2MuMuPAT.lowerPuritySelection = cms.string("(isGlobalMuon || isTrack
 process.onia2MuMuPAT.addMCTruth = cms.bool(True)
 
 # Path and EndPath definitions
+process.genParticlesTask = cms.Task(process.prunedGenParticles,process.packedGenParticles,process.prunedGenParticlesWithStatusOne)
 process.genTask_step = cms.Path(process.genParticlesTask)
 process.RECOSIMoutput_step = cms.EndPath(process.RECOSIMoutput)
 process.SKIMStreamBPHSkimOutPath = cms.EndPath(process.SKIMStreamBPHSkim)
