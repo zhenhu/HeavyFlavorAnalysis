@@ -8,8 +8,21 @@ scram b
 cd HeavyFlavorAnalysis
 cd Onia2MuMu/test/2017
 voms-proxy-init -voms cms --valid 172:00
-./multicrab_2017_MinBias --crabCmd=submit
+```
+To skim MC events, first run local test with
+```
+cmsRun BPH_SKIM_MC_crab.py
+```
+, then submit crab jobs with your self-written crab config. 
+
+To skim data events, first run local test with
+```
+cmsRun BPH_SKIM_crab_2017.py
+```
+, then submit crab jobs using either your self-written crab config or the multicrab tool below:
+```
 ./multicrab_2017 --crabCmd=submit
+./multicrab_2017_MinBias --crabCmd=submit
 ```
 
 Following script will loop over all jobs within director (crabOutput2017_)  and will keep resubmitting failing jobs after every 30 mints
@@ -27,6 +40,20 @@ scram b
 cd HeavyFlavorAnalysis
 cd Onia2MuMu/test/2018
 voms-proxy-init -voms cms --valid 172:00
+```
+To skim MC events, first run local test with
+```
+cmsRun BPH_SKIM_MC_crab.py
+```
+, then submit crab jobs with your self-written crab config. 
+
+To skim data events, first run local test with
+```
+cmsRun BPH_SKIM_crab_2018ABC.py
+cmsRun BPH_SKIM_crab_2018D.py
+```
+,  then submit crab jobs using either your self-written crab config or the multicrab tool below:
+```
 ./multicrab_2018ABC --crabCmd=submit
 ./multicrab_2018D --crabCmd=submit
 ./multicrab_2018ABC_MinBias --crabCmd=submit
@@ -48,6 +75,18 @@ scram b
 cd HeavyFlavorAnalysis
 cd Onia2MuMu/test/2016
 voms-proxy-init -voms cms --valid 172:00
+```
+To skim MC events, first run local test with
+```
+cmsRun BPH_SKIM_MC_crab.py
+```
+, then submit crab jobs with your self-written crab config.
+
+To skim data events, first run local test with
+```
+BPH_SKIM_crab_2016.py
+,  then submit crab jobs using either your self-written crab config or the multicrab tool below:
+```
 ./multicrab_2016 --crabCmd=submit
 ```
 
