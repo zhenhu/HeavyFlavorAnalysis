@@ -85,10 +85,13 @@ cmsRun BPH_SKIM_MC_crab.py
 To skim data events, first run local test with
 ```
 BPH_SKIM_crab_2016.py
+```
 ,  then submit crab jobs using either your self-written crab config or the multicrab tool below:
 ```
 ./multicrab_2016 --crabCmd=submit
 ```
 
-Following script will loop over all jobs within director (crabOutput2016_)  and will keep resubmitting failing jobs after every 30 mints```
+Following script will loop over all jobs within director (crabOutput2016_)  and will keep resubmitting failing jobs after every 30 mints
+```
 nohup python manageCrabTask.py -l -r -t crabOutput2016_ >& crabOutput2016_.log &
+```
