@@ -125,14 +125,14 @@ process.onia2MuMuPAT.lowerPuritySelection = cms.string("(isGlobalMuon || isTrack
 process.onia2MuMuPAT.addMCTruth = cms.bool(True)
 
 # Path and EndPath definitions
-process.genParticlesTask = cms.Task(process.prunedGenParticles,process.packedGenParticles,process.prunedGenParticlesWithStatusOne)
-process.genTask_step = cms.Path(process.genParticlesTask)
+#process.genParticlesTask = cms.Task(process.prunedGenParticles,process.packedGenParticles,process.prunedGenParticlesWithStatusOne)
+#process.genTask_step = cms.Path(process.genParticlesTask)
 process.RECOSIMoutput_step = cms.EndPath(process.RECOSIMoutput)
 process.SKIMStreamBPHSkimOutPath = cms.EndPath(process.SKIMStreamBPHSkim)
 
 # Schedule definition
-#process.schedule = cms.Schedule(process.BPHSkimPath, process.SKIMStreamBPHSkimOutPath)
-process.schedule = cms.Schedule(process.genTask_step, process.BPHSkimPath, process.SKIMStreamBPHSkimOutPath)
+process.schedule = cms.Schedule(process.BPHSkimPath, process.SKIMStreamBPHSkimOutPath)
+#process.schedule = cms.Schedule(process.genTask_step, process.BPHSkimPath, process.SKIMStreamBPHSkimOutPath)
 
 # Schedule definition
 #process.schedule = cms.Schedule(process.BPHSkimPath,process.RECOSIMoutput_step,process.SKIMStreamBPHSkimOutPath)
