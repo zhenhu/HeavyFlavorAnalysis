@@ -1,3 +1,30 @@
+# Skim for UL
+```
+cmsrel CMSSW_10_6_20
+cd CMSSW_10_6_20/src/
+cmsenv
+git clone https://github.com/zhenhu/HeavyFlavorAnalysis
+scram b
+cd HeavyFlavorAnalysis
+cd Onia2MuMu/test/UL/
+voms-proxy-init -voms cms --valid 172:00
+```
+To skim MC events, first run local test with
+```
+cmsRun BPH_SKIM_UL_MC2018.py
+cmsRun BPH_SKIM_UL_MC2017.py
+cmsRun BPH_SKIM_UL_MC2016.py
+cmsRun BPH_SKIM_UL_MC2016preVFP.py
+
+```
+, then submit crab jobs with your self-written crab config.
+
+To skim data events, first run local test with
+```
+cmsRun BPH_SKIM_UL_data.py
+```
+, then submit crab jobs with your self-written crab config.
+
 # Skim for 2017
 ```
 cmsrel CMSSW_9_4_2
